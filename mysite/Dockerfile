@@ -24,4 +24,4 @@ COPY . .
 
 RUN chmod +x /usr/src/mysite/entrypoint.sh
 
-ENTRYPOINT ["/usr/src/mysitce/entrypoint.sh"]
+ENTRYPOINT ["/usr/src/mysite/entrypoint.sh"]
