@@ -2,6 +2,8 @@
 FROM python:3.8.6-alpine
 
 # рабочая директория внутри проекта
+# ВНИМЕНИЕ - МЫ копирвем ТУТ только ТЕ файлы рядом с которыми тусит DockerFile!!!!!!!!!!!!!!!
+# т.е. в папке будет (пример) /usr/src/mysite/manage.py
 WORKDIR /usr/src/mysite
 
 # переменные окружения для python
@@ -22,4 +24,4 @@ COPY . .
 
 RUN chmod 774 /usr/src/mysite/entrypoint.sh
 
-#ENTRYPOINT ["/usr/src/mysite/entrypoint.sh"]
+ENTRYPOINT ["/usr/src/mysite/entrypoint.sh"]
