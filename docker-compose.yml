@@ -13,5 +13,5 @@ services:
     ports:
       - 8000:8000
     # Файл содержащий переменные для контейнера
-#    env_file:
-#      - ./.env.dev
+    env_file:
+      - ./.env.dev
