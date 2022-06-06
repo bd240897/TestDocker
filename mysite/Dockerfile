@@ -22,6 +22,6 @@ RUN pip install -r requirements.txt
 # копируем содержимое текущей папки в контейнер
 COPY . .
 
-RUN chmod 774 /usr/src/mysite/entrypoint.sh
+RUN chmod 777 /usr/src/mysite/entrypoint.sh
 
 ENTRYPOINT ["/usr/src/mysite/entrypoint.sh"]
