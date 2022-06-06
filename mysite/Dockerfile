@@ -2,7 +2,7 @@
 FROM python:3.8.6-alpine
 
 # рабочая директория внутри проекта
-WORKDIR /usr/src/app
+WORKDIR /usr/src/mysite
 
 # переменные окружения для python
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -19,3 +19,7 @@ RUN pip install -r requirements.txt
 
 # копируем содержимое текущей папки в контейнер
 COPY . .
+
+RUN chmod 774 /mysite/entrypoint.sh
+
+ENTRYPOINT ["/usr/src/mysite/mysite/entrypoint.sh"]
