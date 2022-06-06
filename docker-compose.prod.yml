@@ -5,7 +5,9 @@ version: '3.8'
 services:
   web:
     # Берем Dockerfile из каталога app
-    build: ./mysite
+    build:
+      - context: ./mysite
+      - dockerfile: Dockerfile.prod
     # Запускаем сервер gunicorn - вместо python manage.py runserver 0.0.0.0:8000
     command: gunicorn mysite.wsgi:application --bind 0.0.0.0:8000
     # Открываем порт 8000 внутри и снаружи
