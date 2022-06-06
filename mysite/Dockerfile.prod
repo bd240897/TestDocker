@@ -17,11 +17,11 @@ RUN pip install --upgrade pip
 # проверка кода через линтер
 RUN pip install flake8
 COPY . .
-RUN flake8 --ignore=E501,F401 /usr/src/app/mysite
+RUN flake8 --ignore=E501,F401 /usr/src/mysite/mysite
 
 # установка зависимостей
 COPY ./requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/mysite/wheels -r requirements.txt
 
 
 #########
@@ -34,7 +34,7 @@ FROM python:3.8.3-alpine
 RUN mkdir -p /home/mysite
 
 # создаем отдельного пользователя
-RUN addgroup -S mysite && adduser -S app -G app
+RUN addgroup -S mysite && adduser -S mysite -G mysite
 
 # создание каталога для приложения
 ENV HOME=/home/mysite
