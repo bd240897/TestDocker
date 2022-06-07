@@ -1,63 +1,38 @@
-###########
-# BUILDER #
-###########
+# образ на основе которого создаём контейнер
+FROM python:3.8.6-alpine
 
-FROM python:3.8.3-alpine as builder
-
-WORKDIR /usr/src/mysite
-
+# переменные окружения для python
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV HOME=/home/project
+ENV MYSITE_HOME=/home/project/mysite
 
-# установка зависимостей
+# Устанавливаем зависимости для Postgre
 RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev
+    && apk add postgresql-dev gcc python3-dev musl-dev libpq
+
+# создание каталога для приложения
+RUN mkdir -p $MYSITE_HOME
+WORKDIR $MYSITE_HOME
+
+# устанавливаем зависимости
 RUN pip install --upgrade pip
+COPY ./requirements.txt $MYSITE_HOME
+RUN pip install -r requirements.txt
 
-# проверка кода через линтер
-RUN pip install flake8
-COPY . .
-RUN flake8 --ignore=E501,F401 /usr/src/mysite/mysite
+# копирование entrypoint-prod.sh
+COPY ./entrypoint.prod.sh $MYSITE_HOME
 
-# установка зависимостей
-COPY ./requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/mysite/wheels -r requirements.txt
-
-
-#########
-# FINAL #
-#########
-
-FROM python:3.8.3-alpine
-
-# создаем директорию для пользователя
-RUN mkdir -p /home/mysite
+# копирование проекта Django
+COPY . $MYSITE_HOME
 
 # создаем отдельного пользователя
 RUN addgroup -S mysite && adduser -S mysite -G mysite
 
-# создание каталога для приложения
-ENV HOME=/home/mysite
-ENV APP_HOME=/home/mysite/web
-RUN mkdir $APP_HOME
-WORKDIR $APP_HOME
-
-# установка зависимостей и копирование из builder
-RUN apk update && apk add libpq
-COPY --from=builder /usr/src/mysite/wheels /wheels
-COPY --from=builder /usr/src/mysite/requirements.txt .
-RUN pip install --no-cache /wheels/*
-
-# копирование entrypoint-prod.sh
-COPY ./entrypoint.prod.sh $APP_HOME
-
-# копирование проекта Django
-COPY . $APP_HOME
-
 # изменение прав для пользователя app
-RUN chown -R mysite:mysite $APP_HOME
+RUN chown -R mysite:mysite $MYSITE_HOME
 
 # изменение рабочего пользователя
 USER mysite
 
-ENTRYPOINT ["/home/mysite/web/entrypoint.prod.sh"]
+ENTRYPOINT ["/home/project/mysite/entrypoint.prod.sh"]
