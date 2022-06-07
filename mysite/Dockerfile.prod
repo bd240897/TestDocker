@@ -13,6 +13,8 @@ RUN apk update \
 
 # создание каталога для приложения
 RUN mkdir -p $MYSITE_HOME
+RUN mkdir $MYSITE_HOME/static
+RUN mkdir $MYSITE_HOME/media
 WORKDIR $MYSITE_HOME
 
 # устанавливаем зависимости
