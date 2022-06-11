@@ -6,6 +6,8 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV HOME=/home/project
 ENV MYSITE_HOME=/home/project/mysite
+ENV MEDIA_DIR=/home/project/mysite/media
+ENV STATIC_DIR=/home/project/mysite/static
 
 # Устанавливаем зависимости для Postgre
 RUN apk update \
@@ -33,6 +35,8 @@ RUN addgroup -S mysite && adduser -S mysite -G mysite
 
 # изменение прав для пользователя app
 RUN chown -R mysite:mysite $MYSITE_HOME
+RUN chown -R mysite:mysite $MEDIA_DIR
+RUN chown -R mysite:mysite $STATIC_DIR
 
 # изменение рабочего пользователя
 USER mysite
