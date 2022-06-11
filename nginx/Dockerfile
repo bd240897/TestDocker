@@ -6,5 +6,5 @@ COPY nginx.conf /etc/nginx/conf.d/
 
 ENV MEDIA_DIR=/home/project/mysite/media
 ENV STATIC_DIR=/home/project/mysite/static
-RUN mkdir $MEDIA_DIR
-RUN mkdir $STATIC_DIR
+RUN mkdir -p $MEDIA_DIR
+RUN mkdir -p $STATIC_DIR
